@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TaihengNavDrawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Soporte TaiHeng</string>
+    <string name="nav_header_subtitle">soporte@taiheng.com.pe</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="Opciones">
+        <item>NORMAL/ENTREGADO</item>
+        <item>RECHAZO PARCIAL</item>
+        <!--   <item>RECHAZO TOTAL</item> -->
+    </string-array>
+
+
+</resources>
