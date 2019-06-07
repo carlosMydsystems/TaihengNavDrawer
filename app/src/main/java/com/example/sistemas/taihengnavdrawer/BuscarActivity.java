@@ -36,15 +36,12 @@ public class BuscarActivity extends AppCompatActivity {
         listahojaruta = (ArrayList<HojaRuta>) getIntent().getSerializableExtra("listahojaruta");
         lvclientes = findViewById(R.id.listClientes);
 
-
         tvchofer = findViewById(R.id.tvChofer);
         tvnumrtoplaca = findViewById(R.id.tvPlaca);
         tvfecharegistro = findViewById(R.id.tvFechaRegistro);
         tvhojaRuta = findViewById(R.id.tvNumHruta);
         btncancelar = findViewById(R.id.btnCancelar);
-
         tvplaca = findViewById(R.id.tvPlaca);
-
         tipobusqueda = "";
         numeroHojaRuta = getIntent().getExtras().getString("numeroHojaRuta");
         usuario = new Usuario();
@@ -87,18 +84,17 @@ public class BuscarActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(BuscarActivity.this, DetalleBusquedaActivity.class);
-                intent.putExtra("Id_Cliente", listahojaruta.get(position).getId_Clliente());
-                intent.putExtra("numHojaRuta", listahojaruta.get(position).getNumeroHojaRuta());
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("listahojaruta", listahojaruta);
-                intent.putExtras(bundle);
-                Bundle bundle1 = new Bundle();
-                bundle1.putSerializable("Usuario",usuario);
-                intent.putExtras(bundle1);
-                startActivity(intent);
-                finish();
-
+            Intent intent = new Intent(BuscarActivity.this, DetalleBusquedaActivity.class);
+            intent.putExtra("Id_Cliente", listahojaruta.get(position).getId_Clliente());
+            intent.putExtra("numHojaRuta", listahojaruta.get(position).getNumeroHojaRuta());
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("listahojaruta", listahojaruta);
+            intent.putExtras(bundle);
+            Bundle bundle1 = new Bundle();
+            bundle1.putSerializable("Usuario",usuario);
+            intent.putExtras(bundle1);
+            startActivity(intent);
+            finish();
             }
         });
     }

@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
 import java.util.Calendar;
@@ -24,28 +25,43 @@ public class MainActivity extends AppCompatActivity
 
         TextView tvfecha,tvhora;
         Usuario usuario;
+        Button btnhojaRuta,btnsalir;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        btnhojaRuta = findViewById(R.id.btnhojaRuta);
+        btnsalir = findViewById(R.id.btnsalir);
+        setSupportActionBar(toolbar);
         tvfecha = findViewById(R.id.tvdate);
         tvhora = findViewById(R.id.tvHora);
         Calendar fecha =  Calendar.getInstance();
         Integer dia = fecha.get(Calendar.DAY_OF_MONTH);
         Integer mes = fecha.get(Calendar.MONTH);
         Integer anio = fecha.get(Calendar.YEAR);
-        String fechaActual = dia+"/"+mes +"/"+anio;
+        String fechaActual =Formatotiempo(dia) +"/"+Formatotiempo( mes) +"/"+anio;
         tvfecha.setText(fechaActual);
         Timer timer ;
 
         usuario = (Usuario)getIntent().getExtras().getSerializable("Usuario");
 
+        btnsalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this,LoginActivity.class);
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+
+
         final Runnable updateTask = new Runnable() {
             public void run() {
-
 
                 Calendar hora1 = Calendar.getInstance();
                 Integer hora = hora1.get(Calendar.HOUR_OF_DAY);
@@ -71,6 +87,20 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        btnhojaRuta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this,ValidaHojaRutaActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Usuario",usuario);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                finish();
+
             }
         });
 
@@ -132,10 +162,6 @@ public class MainActivity extends AppCompatActivity
             finish();
 
         } else if (id == R.id.nav_Articulos) {
-
-            Intent intent = new Intent(MainActivity.this,ControlArticulosActivity.class);
-            startActivity(intent);
-            finish();
 
         } else if (id == R.id.nav_slideshow) {
 

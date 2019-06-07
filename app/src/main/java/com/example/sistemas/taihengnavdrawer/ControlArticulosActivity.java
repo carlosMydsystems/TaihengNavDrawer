@@ -10,7 +10,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,13 +18,14 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+
+import static com.example.sistemas.taihengnavdrawer.LoginActivity.ejecutaFuncionCursorTestMovil;
+import static com.example.sistemas.taihengnavdrawer.LoginActivity.ejecutaFuncionTestMovil;
 
 public class ControlArticulosActivity extends AppCompatActivity {
 
@@ -109,10 +109,6 @@ public class ControlArticulosActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
     }
 
     private void ActualizarArticulo(String trama) {
@@ -120,7 +116,7 @@ public class ControlArticulosActivity extends AppCompatActivity {
         // TODO se debe realizar la actualizacion del articulo
 
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-        url =  "http://www.taiheng.com.pe:8494/oracle/ejecutaFuncionTestMovil.php?funcion=FN_INSERTA_ART&variables='"+trama+"'";
+        url = ejecutaFuncionTestMovil+"FN_INSERTA_ART&variables='"+trama+"'";
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url ,
                 new Response.Listener<String>() {
                     @Override
@@ -166,8 +162,7 @@ public class ControlArticulosActivity extends AppCompatActivity {
         progressDialog.show();
         progressDialog.setCancelable(false);
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-        url =  "http://www.taiheng.com.pe:8494/oracle/ejecutaFuncionCursorTestMovil.php?funcion=" +
-                "PKG_MOVIL_FUNCIONES.FN_CONSULTAR_PRODUCTO_WS_SP&variables='"+trama+"'";
+        url =  ejecutaFuncionCursorTestMovil+ "PKG_MOVIL_FUNCIONES.FN_CONSULTAR_PRODUCTO_WS_SP&variables='"+trama+"'";
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url ,
                 new Response.Listener<String>() {
                     @Override
@@ -278,8 +273,4 @@ public class ControlArticulosActivity extends AppCompatActivity {
         stringRequest.setRetryPolicy(policy);
         requestQueue.add(stringRequest);
     }
-
-
-
-
 }

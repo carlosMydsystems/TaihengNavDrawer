@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,12 +15,12 @@ import com.android.volley.toolbox.Volley;
 import com.example.sistemas.taihengnavdrawer.Entidades.DetalleHojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.HojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
+
+import static com.example.sistemas.taihengnavdrawer.LoginActivity.ejecutaFuncionCursorTestMovil;
 
 public class PasaEstadoActivity extends AppCompatActivity {
 
@@ -38,7 +36,6 @@ public class PasaEstadoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pasa_estado);
 
         usuario = (Usuario)getIntent().getSerializableExtra("Usuario");
-
         lvp1 = new ArrayList<>();
         lvp2 = new ArrayList<>();
         lvp3 = new ArrayList<>();
@@ -49,14 +46,12 @@ public class PasaEstadoActivity extends AppCompatActivity {
         listadetallehojaruta = (ArrayList<DetalleHojaRuta> ) getIntent().getSerializableExtra("Lista");
         listahojaruta = (ArrayList<HojaRuta> ) getIntent().getSerializableExtra("listahojaruta");
         Recorelista();
-        Toast.makeText(this, listahojaruta.get(0).getFechaRegistro(), Toast.LENGTH_SHORT).show();
-
     }
 
     public void Recorelista (){
 
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-        url =  "http://www.taiheng.com.pe:8494/oracle/ejecutaFuncionCursorTestMovil.php?funcion=pkg_movil_funciones.fn_obtener_motivos_hruta&variables='9'";
+        url = ejecutaFuncionCursorTestMovil +"PKG_MOVIL_FUNCIONES.FN_OBTENER_MOTIVOS_HRUTA&variables='9'";
 
 
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url ,

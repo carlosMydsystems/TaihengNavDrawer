@@ -3,60 +3,101 @@ package com.example.sistemas.taihengnavdrawer.Entidades;
 import java.io.Serializable;
 
 public class Usuario implements Serializable {
-    private String Id_Usuario;
-    private String Nickname;
-    private String Nombre;
-    private String Apellido;
-    private String Perfil;
 
-    public Usuario(String id_Usuario, String nickname, String nombre, String apellido, String perfil) {
-        Id_Usuario = id_Usuario;
-        Nickname = nickname;
-        Nombre = nombre;
-        Apellido = apellido;
-        Perfil = perfil;
+    private String nombre;
+    private String user;
+    private String fechaActual;
+    private String tipoCambio;
+    private String moneda;
+    private String codVendedor;
+    private String codAlmacen;
+    private String codTienda;
+    private String lugar;
+
+    public Usuario(String nombre, String user, String fechaActual, String tipoCambio, String moneda,
+                   String codVendedor, String codAlmacen, String codTienda, String lugar) {
+
+        this.nombre = nombre;
+        this.user = user;
+        this.fechaActual = fechaActual;
+        this.tipoCambio = tipoCambio;
+        this.moneda = moneda;
+        this.codVendedor = codVendedor;
+        this.codAlmacen = codAlmacen;
+        this.codTienda = codTienda;
+        this.lugar = lugar;
+
     }
 
     public Usuario() {
     }
 
-    public String getNickname() {
-        return Nickname;
+
+    public String getUser() { return user; }
+
+    public void setUser(String user) { this.user = user; }
+
+    public String getLugar() {
+        return lugar;
     }
 
-    public void setNickname(String nickname) {
-        Nickname = nickname;
-    }
-
-    public String getId_Usuario() {
-        return Id_Usuario;
-    }
-
-    public void setId_Usuario(String id_Usuario) {
-        Id_Usuario = id_Usuario;
+    public void setLugar(String lugar) {
+        this.lugar = lugar;
     }
 
     public String getNombre() {
-        return Nombre;
+        return nombre;
     }
 
     public void setNombre(String nombre) {
-        Nombre = nombre;
+        this.nombre = nombre;
     }
 
-    public String getApellido() {
-        return Apellido;
+    public String getFechaActual() {
+        return fechaActual;
     }
 
-    public void setApellido(String apellido) {
-        Apellido = apellido;
+    public void setFechaActual(String fechaActual) {
+        this.fechaActual = fechaActual;
     }
 
-    public String getPerfil() {
-        return Perfil;
+    public String getTipoCambio() {
+        return tipoCambio;
     }
 
-    public void setPerfil(String perfil) {
-        Perfil = perfil;
+    public void setTipoCambio(String tipoCambio) {
+        this.tipoCambio = tipoCambio;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public String getCodVendedor() {
+        return codVendedor;
+    }
+
+    public void setCodVendedor(String codVendedor) {
+        this.codVendedor = codVendedor;
+    }
+
+    public String getCodAlmacen() {
+        return codAlmacen;
+    }
+
+    public void setCodAlmacen(String codAlmacen) {
+        this.codAlmacen = codAlmacen;
+    }
+
+    public String getCodTienda() {
+        return codTienda;
+    }
+
+    public void setCodTienda(String codTienda) {
+        this.codTienda = codTienda;
     }
 }

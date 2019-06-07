@@ -26,6 +26,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static com.example.sistemas.taihengnavdrawer.LoginActivity.ejecutaFuncionCursorTestMovil;
+
 public class DetalleBusquedaActivity extends AppCompatActivity {
 
     TextView tvcliente,tvdireccion,tvdistrito,tvDetalleCliente;
@@ -41,12 +43,11 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_busqueda);
 
-       tvcliente = findViewById(R.id.tvRazonSocial);
+        tvcliente = findViewById(R.id.tvRazonSocial);
         tvdireccion = findViewById(R.id.tvDireccion);
         tvdistrito = findViewById(R.id.tvdistrito);
         btnRegresar = findViewById(R.id.btnRegresar);
         tvDetalleCliente = findViewById(R.id.tvdetalleCliente);
-
         listahojaruta = (ArrayList<HojaRuta> ) getIntent().getSerializableExtra("listahojaruta");
 
         // Recibe los parametros del Intent MainActivity
@@ -97,13 +98,15 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
                         .class);
                 intent.putExtra("Id_Cliente",codcliente);
                 intent.putExtra("numHojaRuta1",numHojaRuta);
-// Se hace un llamado a un bundle
+
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("Lista",  listadetallehojaruta);
                 intent.putExtras(bundle);
+
                 Bundle bundle1 = new Bundle();
                 bundle1.putSerializable("listahojaruta",  listahojaruta);
                 intent.putExtras(bundle1);
+
                 Bundle bundle2 = new Bundle();
                 bundle2.putSerializable("Usuario",usuario);
                 intent.putExtras(bundle2);
@@ -120,7 +123,8 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
         progressDialog.setMessage("... Cargando");
         progressDialog.show();
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
-        url =  "http://www.taiheng.com.pe:8494/oracle/ejecutaFuncionCursorTestMovil.php?funcion=PKG_MOVIL_FUNCIONES.FN_OBTENER_DHRUTA&variables='"+numHojaRuta+"|"+codcliente+"'";
+
+        url =  ejecutaFuncionCursorTestMovil + "PKG_MOVIL_FUNCIONES.FN_OBTENER_DHRUTA&variables='"+numHojaRuta+"|"+codcliente+"'";
 
         listadetallehojaruta = new ArrayList<>();
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url ,
@@ -129,7 +133,6 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
                     public void onResponse(String response) {
 
                         cadena = response;
-                        String cadenacaptura = "";
 
                         try {
                             JSONObject jsonObject=new JSONObject(response);
@@ -173,6 +176,5 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         stringRequest.setRetryPolicy(policy);
         requestQueue.add(stringRequest);
-
     }
 }

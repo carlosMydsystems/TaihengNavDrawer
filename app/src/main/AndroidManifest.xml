@@ -3,7 +3,8 @@
     package="com.example.sistemas.taihengnavdrawer">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
@@ -23,13 +24,20 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ValidaHojaRutaActivity" />
-        <activity android:name=".BuscarActivity" />
-        <activity android:name=".DetalleBusquedaActivity" />
-        <activity android:name=".PasaEstadoActivity" />
-        <activity android:name=".ListaDocumentosActivity" />
-        <activity android:name=".ControlArticulosActivity"></activity>
+        <activity android:name=".ValidaHojaRutaActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".BuscarActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".DetalleBusquedaActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".PasaEstadoActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ListaDocumentosActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ControlArticulosActivity"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
