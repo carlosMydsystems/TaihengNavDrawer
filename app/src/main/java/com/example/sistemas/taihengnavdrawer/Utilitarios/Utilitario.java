@@ -1,5 +1,9 @@
 package com.example.sistemas.taihengnavdrawer.Utilitarios;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
 public class Utilitario {
 
     public static String Soles = "S/"; // Cambio de moneda en Soles
@@ -11,7 +15,6 @@ public class Utilitario {
     public static final Integer PHONESTATS = 0x1;
 
     public static String formatoFecha(Integer dateTime){
-
         String valor = "0";
         if (dateTime <=9){
             valor = valor + dateTime;
@@ -19,6 +22,12 @@ public class Utilitario {
             valor = dateTime + "";
         }
         return valor;
+    }
+
+    public static boolean isOnline(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
     }
 
 }

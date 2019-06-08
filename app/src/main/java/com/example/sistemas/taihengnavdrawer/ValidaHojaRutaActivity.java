@@ -5,12 +5,11 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -21,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sistemas.taihengnavdrawer.Entidades.HojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
+import com.example.sistemas.taihengnavdrawer.Utilitarios.Utilitario;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,7 +51,34 @@ public class ValidaHojaRutaActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             numeroHojaRuta = etnumerohojaruta.getText().toString();
-            CapturarJson(numeroHojaRuta);
+                if (etnumerohojaruta.length()<10){
+
+                    AlertDialog.Builder build = new AlertDialog.Builder(ValidaHojaRutaActivity.this);
+                    build.setCancelable(false);
+                    build.setTitle("Atención...!");
+                    build.setMessage("El Número de hoja de Ruta debe tener 10 dígitos");
+                    build.setNegativeButton("Aceptar",null);
+                    build.create().show();
+
+                }else {
+
+                //etnumerohojaruta.setFilters(new InputFilter[] {new InputFilter.LengthFilter(10)});
+
+                    if(Utilitario.isOnline(getApplicationContext())){
+
+                        CapturarJson(numeroHojaRuta);
+
+                    }else{
+
+                        AlertDialog.Builder build = new AlertDialog.Builder(ValidaHojaRutaActivity.this);
+                        build.setTitle("Atención .. !");
+                        build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                        build.setCancelable(false);
+                        build.setNegativeButton("ACEPTAR",null);
+                        build.create().show();
+
+                    }
+                }
             }
         });
 
@@ -102,6 +129,7 @@ public class ValidaHojaRutaActivity extends AppCompatActivity {
                         Aux = Aux.replace("|", "");
                         Aux = Aux.replace(":", " ");
                         String partes[] = Aux.split(" ");
+
                         for (String palabras : partes) {
                             if (condicion) {
                                 Mensaje += palabras + " ";
@@ -168,6 +196,13 @@ public class ValidaHojaRutaActivity extends AppCompatActivity {
         @Override
         public void onErrorResponse(VolleyError error) {
             error.printStackTrace();
+            progressDialog.dismiss();
+            AlertDialog.Builder build = new AlertDialog.Builder(ValidaHojaRutaActivity.this);
+            build.setTitle("Atención .. !");
+            build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+            build.setCancelable(false);
+            build.setNegativeButton("ACEPTAR",null);
+            build.create().show();
         }
     });
 

@@ -18,6 +18,8 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.sistemas.taihengnavdrawer.Utilitarios.Utilitario;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -104,7 +106,23 @@ public class ControlArticulosActivity extends AppCompatActivity {
                     tvprecio.setText("");
                     tvstock.setText("");
                     btnbuscar.setVisibility(View.GONE);
-                    EnviarTrama(TRAMA);
+
+                    if(Utilitario.isOnline(getApplicationContext())){
+
+                        EnviarTrama(TRAMA);
+
+                    }else{
+
+                        AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
+                        build.setTitle("Atención .. !");
+                        build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                        build.setCancelable(false);
+                        build.setNegativeButton("ACEPTAR",null);
+                        build.create().show();
+
+                    }
+
+
                 }
             }
         });
