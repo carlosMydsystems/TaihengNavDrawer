@@ -1,6 +1,7 @@
 package com.example.sistemas.taihengnavdrawer;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -113,8 +114,8 @@ public class ListaDocumentosActivity extends AppCompatActivity {
     }
 
     private void ObtenerLista() {
+
         String detalleEstado = " ";
-        Toast.makeText(this, "tamaño " + listadetallehojaruta.size(), Toast.LENGTH_SHORT).show();
         listaInformacion = new ArrayList<>();
 
         for (int i=0; i< listadetallehojaruta.size();i++){
@@ -123,6 +124,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                 detalleEstado = "Normal Entregado";
             }else if(listadetallehojaruta.get(i).getEstado().subSequence(0,2).equals("RP")){
                 for (int j = 0 ; j<lvp2.size();j++){
+
                     if(listadetallehojaruta.get(i).getEstado().equals(lvp2.get(j))){
                         detalleEstado = lvp1.get(j);
                     }
@@ -133,7 +135,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                 listaInformacion.add("Documento     :   " +listadetallehojaruta.get(i).getNumerodocumento()  +
                         " \n" +      "Fecha Doc       :    " + listadetallehojaruta.get(i).getFechadocumento()+
                         " \n" +      "Importe Doc   :    S/ " + listadetallehojaruta.get(i).getImportedocumento() +
-                        " \n" +      "Estado             :    " + listadetallehojaruta.get(i).getEstado() + " - " + "El estado es nulo \n" );
+                        " \n" +      "Estado             :    " + "   " + " - " + " \n" );
 
             }else{
 
@@ -141,6 +143,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                         " \n" +      "Fecha Doc       :    " + listadetallehojaruta.get(i).getFechadocumento()+
                         " \n" +      "Importe Doc   :    S/ " + listadetallehojaruta.get(i).getImportedocumento() +
                         " \n" +      "Estado             :    " + listadetallehojaruta.get(i).getEstado() + " - " + detalleEstado.substring(0,12)+" \n" );
+
             }
         }
 
@@ -232,6 +235,12 @@ public class ListaDocumentosActivity extends AppCompatActivity {
 
     public void EnviarTrama (final String Trama, final String estado, final Integer i){
 
+        final ProgressDialog progressDialog = new ProgressDialog(ListaDocumentosActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("... Cargando");
+        progressDialog.create();
+        progressDialog.show();
+
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
 
         url =  ejecutaFuncionTestMovil + "PKG_MOVIL_FUNCIONES.FN_ACTUALIZA_DHRUTA&variables='"+Trama+"'";
@@ -241,6 +250,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response1) {
 
+                        progressDialog.dismiss();
                         Id_cliente = getIntent().getExtras().getString("Id_Cliente");
                         numhojaaux = getIntent().getExtras().getString("numHojaRuta1");
 
@@ -273,6 +283,13 @@ public class ListaDocumentosActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                //progressDialog.dismiss();
+                AlertDialog.Builder build = new AlertDialog.Builder(ListaDocumentosActivity.this);
+                build.setTitle("Atención .. !");
+                build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+                build.setCancelable(false);
+                build.setNegativeButton("ACEPTAR",null);
+                build.create().show();
             }
         });
 

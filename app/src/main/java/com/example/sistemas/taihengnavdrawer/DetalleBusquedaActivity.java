@@ -2,6 +2,7 @@ package com.example.sistemas.taihengnavdrawer;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -155,19 +156,35 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
                                 detallehojaruta.setEstado(jsonObject.getString("SITUACION_CD"));
                                 listadetallehojaruta.add(detallehojaruta);
                             }
+
                             tvcliente.setText(listadetallehojaruta.get(0).getCodCliente()+" - "+listadetallehojaruta.get(0).getCliente());
                             tvdireccion.setText(listadetallehojaruta.get(0).getLugarEntrega());
                             tvdistrito.setText(listadetallehojaruta.get(0).getDistrito());
 
                             progressDialog.dismiss();
+
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            progressDialog.dismiss();
+                            AlertDialog.Builder build = new AlertDialog.Builder(DetalleBusquedaActivity.this);
+                            build.setTitle("Atención .. !");
+                            build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+                            build.setCancelable(false);
+                            build.setNegativeButton("ACEPTAR",null);
+                            build.create().show();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                progressDialog.dismiss();
+                AlertDialog.Builder build = new AlertDialog.Builder(DetalleBusquedaActivity.this);
+                build.setTitle("Atención .. !");
+                build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+                build.setCancelable(false);
+                build.setNegativeButton("ACEPTAR",null);
+                build.create().show();
             }
         });
 

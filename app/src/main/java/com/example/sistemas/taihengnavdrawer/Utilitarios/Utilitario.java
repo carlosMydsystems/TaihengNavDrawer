@@ -12,7 +12,7 @@ public class Utilitario {
     public static String webServiceCursormovil =  "http://www.taiheng.com.pe:8494/oracle/ejecutaFuncionCursorDesaMovil.php?funcion=";
     public static String webServicemovil =  "http://www.taiheng.com.pe:8494/oracle/ejecutaFuncionDesaMovil.php?funcion=";
 
-    public static final Integer PHONESTATS = 0x1;
+    // public static final Integer PHONESTATS = 0x1;
 
     public static String formatoFecha(Integer dateTime){
         String valor = "0";
@@ -29,5 +29,4 @@ public class Utilitario {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
     }
-
 }

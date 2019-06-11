@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
 
             ejecutaFuncionCursorTestMovil = "http://www.taiheng.com.pe:"+puerto+"/oracle/ejecutaFuncionCursorDesaMovil.php?funcion=";
             ejecutaFuncionTestMovil = "http://www.taiheng.com.pe:"+puerto+"/oracle/ejecutaFuncionDesaMovil.php?funcion=";
+
         }
 
         usuario = new Usuario();
@@ -75,10 +76,23 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+            if(Utilitario.isOnline(getApplicationContext())){
+
                 if (etusuario.getText().equals("") || etclave.getText().equals("")) {
                 } else { verificarUsuario(etusuario.getText().toString().replace(" ", "").toUpperCase()
                         , etclave.getText().toString().replace(" ", "").toUpperCase(),imei);
                 }
+
+            }else{
+
+                AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this);
+                build.setTitle("Atención .. !");
+                build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                build.setCancelable(false);
+                build.setNegativeButton("ACEPTAR",null);
+                build.create().show();
+
+            }
             }
         });
     }
@@ -92,22 +106,22 @@ public class LoginActivity extends AppCompatActivity {
         Mensaje = "";
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
 
-
         url =  ejecutaFuncionCursorTestMovil +
                 "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"+Codigo_usuario.toUpperCase()+"|"
                 +Contraseña_usuario.toUpperCase()+"|"+Imei+"'"; // se debe actalizar la URL
+
 /*
         url =  ejecutaFuncionCursorTestMovil + "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"
-        +Codigo_usuario.toUpperCase()+"|"+Contraseña_usuario.toUpperCase()+"|359555085543023'"; // se debe actalizar la URL
+                +Codigo_usuario.toUpperCase()+"|"+Contraseña_usuario.toUpperCase()+"|357014075227793'"; // se debe actalizar la URL
 
         url =  ejecutaFuncionCursorTestMovil + "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"
         +Codigo_usuario.toUpperCase()+"|"+Contraseña_usuario.toUpperCase()+"|359555085551935'";357014075227793
-
 
         url =  ejecutaFuncionCursorTestMovil + "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"+
                 Codigo_usuario.toUpperCase()+"|"+Contraseña_usuario.toUpperCase()+"|359555085551935'";
 
 */
+
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url ,
                 new Response.Listener<String>() {
                     @Override
@@ -135,9 +149,14 @@ public class LoginActivity extends AppCompatActivity {
                                         condicion = true;
                                         error = true;
                                     }
+                                    if (palabras.equals("ERROR:")){
+                                        condicion = true;
+                                        error = true;
+                                    }
                                 }
 
                                 if (error) {
+
                                     android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(
                                             LoginActivity.this);
                                     dialog.setMessage(Mensaje)
@@ -178,8 +197,37 @@ public class LoginActivity extends AppCompatActivity {
                                         .show();
                             }
                         } catch (JSONException e) {
+
+                            Boolean condicion = false,error = false;
                             progressDialog.dismiss();
                             e.printStackTrace();
+                            String Aux = response1.replace("{","|");
+                            Aux = Aux.replace("}","|");
+                            Aux = Aux.replace("[","|");
+                            Aux = Aux.replace("]","|");
+                            Aux = Aux.replace("\"","|");
+                            Aux = Aux.replace(","," ");
+                            Aux = Aux.replace("|","");
+                            Aux = Aux.replace(":"," ");
+                            String partes[] = Aux.split(" ");
+
+                            for (String palabras : partes){
+                                if (condicion){ Mensaje += palabras+" "; }
+                                if (palabras.equals("ERROR")){
+                                    condicion = true;
+                                    error = true;
+                                }
+
+                            }
+
+                            if (error) {
+                                android.support.v7.app.AlertDialog.Builder dialog = new android.support.v7.app.AlertDialog.Builder(
+                                        LoginActivity.this);
+                                dialog.setMessage(Mensaje)
+                                        .setNegativeButton("Regresar",null)
+                                        .create()
+                                        .show();
+                            }
                         }
                     }
                 }, new Response.ErrorListener() {
@@ -187,6 +235,12 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progressDialog.dismiss();
+                AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this);
+                build.setTitle("Atención .. !");
+                build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+                build.setCancelable(false);
+                build.setNegativeButton("ACEPTAR",null);
+                build.create().show();
             }
         });
 
@@ -199,11 +253,13 @@ public class LoginActivity extends AppCompatActivity {
 
     private void consultarPermiso(String permission, Integer requestCode) {
         if (ContextCompat.checkSelfPermission(LoginActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
+
             if (ActivityCompat.shouldShowRequestPermissionRationale(LoginActivity.this, permission)) {
                 ActivityCompat.requestPermissions(LoginActivity.this, new String[]{permission}, requestCode);
             } else {
                 ActivityCompat.requestPermissions(LoginActivity.this, new String[]{permission}, requestCode);
             }
+
         } else {
             imei = obtenerIMEI();
         }

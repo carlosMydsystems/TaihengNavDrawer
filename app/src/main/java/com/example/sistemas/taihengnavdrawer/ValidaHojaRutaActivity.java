@@ -65,18 +65,14 @@ public class ValidaHojaRutaActivity extends AppCompatActivity {
                 //etnumerohojaruta.setFilters(new InputFilter[] {new InputFilter.LengthFilter(10)});
 
                     if(Utilitario.isOnline(getApplicationContext())){
-
                         CapturarJson(numeroHojaRuta);
-
                     }else{
-
                         AlertDialog.Builder build = new AlertDialog.Builder(ValidaHojaRutaActivity.this);
                         build.setTitle("Atención .. !");
                         build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
                         build.setCancelable(false);
                         build.setNegativeButton("ACEPTAR",null);
                         build.create().show();
-
                     }
                 }
             }

@@ -80,9 +80,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:textStyle="bold"
-        android:text="Placa                                 :"
+        android:text="Vehículo                            :"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
@@ -129,6 +129,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:background="@color/colorPrimaryDark"
+        android:textSize="18sp"
         android:text="Clientes"
         android:textAlignment="center"
         android:textColor="@color/cardview_light_background"

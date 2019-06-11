@@ -58,8 +58,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
-
         final Runnable updateTask = new Runnable() {
             public void run() {
 
@@ -82,6 +80,7 @@ public class MainActivity extends AppCompatActivity
         }, 1, 1000);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.hide();
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

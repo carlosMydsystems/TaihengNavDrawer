@@ -1,5 +1,6 @@
 package com.example.sistemas.taihengnavdrawer;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,12 @@ public class PasaEstadoActivity extends AppCompatActivity {
 
     public void Recorelista (){
 
+        final ProgressDialog progressDialog = new ProgressDialog(PasaEstadoActivity.this);
+        progressDialog.setMessage("... Cargando");
+        progressDialog.setCancelable(false);
+        progressDialog.create();
+        progressDialog.show();
+
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
         url = ejecutaFuncionCursorTestMovil +"PKG_MOVIL_FUNCIONES.FN_OBTENER_MOTIVOS_HRUTA&variables='9'";
 
@@ -59,6 +66,7 @@ public class PasaEstadoActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response1) {
 
+                        progressDialog.dismiss();
                         try {
                             JSONObject jsonObject=new JSONObject(response1);
                             boolean success = jsonObject.getBoolean("success");
@@ -121,6 +129,14 @@ public class PasaEstadoActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                progressDialog.dismiss();
+                AlertDialog.Builder build = new AlertDialog.Builder(PasaEstadoActivity.this);
+                build.setTitle("Atención .. !");
+                build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+                build.setCancelable(false);
+                build.setNegativeButton("ACEPTAR",null);
+                build.create().show();
+
             }
         });
 

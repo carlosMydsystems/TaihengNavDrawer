@@ -19,13 +19,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.sistemas.taihengnavdrawer.Utilitarios.Utilitario;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-
 import static com.example.sistemas.taihengnavdrawer.LoginActivity.ejecutaFuncionCursorTestMovil;
 import static com.example.sistemas.taihengnavdrawer.LoginActivity.ejecutaFuncionTestMovil;
 
@@ -96,34 +94,32 @@ public class ControlArticulosActivity extends AppCompatActivity {
         btnbuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etarticulo.getText().toString().equals("")) {
+            if (etarticulo.getText().toString().equals("")) {
+
+            }else{
+                btnbuscar.setActivated(false);
+                numeroArticulo = etarticulo.getText().toString();
+                TRAMA = "T07|LIMA|" + numeroArticulo + "||11111111||000|1|999";  //Se genera la trama
+                tvdetallearticulo.setText("");
+                tvprecio.setText("");
+                tvstock.setText("");
+                btnbuscar.setVisibility(View.GONE);
+
+                if(Utilitario.isOnline(getApplicationContext())){
+
+                    EnviarTrama(TRAMA);
 
                 }else{
-                    btnbuscar.setActivated(false);
-                    numeroArticulo = etarticulo.getText().toString();
-                    TRAMA = "T07|LIMA|" + numeroArticulo + "||11111111||000|1|999";  //Se genera la trama
-                    tvdetallearticulo.setText("");
-                    tvprecio.setText("");
-                    tvstock.setText("");
-                    btnbuscar.setVisibility(View.GONE);
 
-                    if(Utilitario.isOnline(getApplicationContext())){
-
-                        EnviarTrama(TRAMA);
-
-                    }else{
-
-                        AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
-                        build.setTitle("Atención .. !");
-                        build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
-                        build.setCancelable(false);
-                        build.setNegativeButton("ACEPTAR",null);
-                        build.create().show();
-
-                    }
-
+                    AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
+                    build.setTitle("Atención .. !");
+                    build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                    build.setCancelable(false);
+                    build.setNegativeButton("ACEPTAR",null);
+                    build.create().show();
 
                 }
+            }
             }
         });
 
@@ -132,6 +128,11 @@ public class ControlArticulosActivity extends AppCompatActivity {
     private void ActualizarArticulo(String trama) {
 
         // TODO se debe realizar la actualizacion del articulo
+        final ProgressDialog progressDialog = new ProgressDialog(ControlArticulosActivity.this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("... Cargando");
+        progressDialog.create();
+        progressDialog.show();
 
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
         url = ejecutaFuncionTestMovil+"FN_INSERTA_ART&variables='"+trama+"'";
@@ -141,6 +142,7 @@ public class ControlArticulosActivity extends AppCompatActivity {
                     public void onResponse(String response1) {
                         try {
 
+                            progressDialog.dismiss();
                             JSONObject jsonObject = new JSONObject(response1);
                             //Boolean success = jsonObject.getBoolean("success");
                             AlertDialog.Builder bulider = new AlertDialog.Builder(ControlArticulosActivity.this);
@@ -148,7 +150,6 @@ public class ControlArticulosActivity extends AppCompatActivity {
                             bulider.setPositiveButton("Regresar",null)
                                     .create()
                                     .show();
-
                             tv4.setVisibility(View.GONE);
                             tv6.setVisibility(View.GONE);
                             btngrabar.setVisibility(View.GONE);
@@ -162,6 +163,13 @@ public class ControlArticulosActivity extends AppCompatActivity {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     error.printStackTrace();
+                    progressDialog.dismiss();
+                    AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
+                    build.setTitle("Atención .. !");
+                    build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+                    build.setCancelable(false);
+                    build.setNegativeButton("ACEPTAR",null);
+                    build.create().show();
                 }
         });
 
@@ -170,7 +178,6 @@ public class ControlArticulosActivity extends AppCompatActivity {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
         stringRequest.setRetryPolicy(policy);
         requestQueue.add(stringRequest);
-
     }
 
     public void EnviarTrama (String trama ){
@@ -213,7 +220,6 @@ public class ControlArticulosActivity extends AppCompatActivity {
                                     etcantidad.setVisibility(View.VISIBLE);
                                     etcantidad.requestFocus();
                                     etcantidad.append("1");
-
                                     String Aux = response1.replace("{","|");
                                     Aux = Aux.replace("}","|");
                                     Aux = Aux.replace("[","|");
@@ -283,6 +289,14 @@ public class ControlArticulosActivity extends AppCompatActivity {
             @Override
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
+                progressDialog.dismiss();
+                AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
+                build.setTitle("Atención .. !");
+                build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+                build.setCancelable(false);
+                build.setNegativeButton("ACEPTAR",null);
+                build.create().show();
+
             }
         });
         int socketTimeout = 30000;

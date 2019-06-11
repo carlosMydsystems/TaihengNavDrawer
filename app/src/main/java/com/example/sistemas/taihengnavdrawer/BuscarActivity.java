@@ -52,7 +52,6 @@ public class BuscarActivity extends AppCompatActivity {
         String cadena = "Nro Hoja Ruta : " + listahojaruta.get(0).getNumeroHojaRuta();
         tvhojaRuta.setText(cadena);
         tvplaca.setText(listahojaruta.get(0).getPlaca());
-
         listacliente = new ArrayList<>();
 
         btncancelar.setOnClickListener(new View.OnClickListener() {
@@ -96,6 +95,7 @@ public class BuscarActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
             }
+
         });
     }
 }

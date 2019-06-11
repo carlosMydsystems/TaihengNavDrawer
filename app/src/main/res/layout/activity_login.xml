@@ -90,7 +90,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/th_logoslogan"
-        tools:srcCompat="@drawable/th_logoslogan" />
+        app:srcCompat="@drawable/camion"
+        tools:srcCompat="@drawable/camion" />
 
 </android.support.constraint.ConstraintLayout>
