@@ -52,23 +52,37 @@ public class ControlArticulosActivity extends AppCompatActivity {
 
         etarticulo.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    btnbuscar.setActivated(false);
-                    if (etarticulo.getText().toString().equals("")) {
-                        etarticulo.requestFocus();
-                    }else {
-                        etcantidad.requestFocus();
-                        numeroArticulo = etarticulo.getText().toString();
-                        TRAMA = "T07|LIMA|"+numeroArticulo+"||11111111||000|1|999";  //Se genera la trama
-                        tvdetallearticulo.setText("");
-                        tvprecio.setText("");
-                        tvstock.setText("");
-                        btnbuscar.setVisibility(View.GONE);
+            if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                btnbuscar.setActivated(false);
+                if (etarticulo.getText().toString().equals("")) {
+                    etarticulo.requestFocus();
+                }else {
+                    etcantidad.requestFocus();
+                    numeroArticulo = etarticulo.getText().toString();
+                    TRAMA = "T07|LIMA|"+numeroArticulo+"||11111111||000|1|999";  //Se genera la trama
+                    tvdetallearticulo.setText("");
+                    tvprecio.setText("");
+                    tvstock.setText("");
+                    btnbuscar.setVisibility(View.GONE);
+
+                    if(Utilitario.isOnline(getApplicationContext())){
+
                         EnviarTrama(TRAMA);
+
+                    }else{
+
+                        AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
+                        build.setTitle("Atención .. !");
+                        build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                        build.setCancelable(false);
+                        build.setNegativeButton("ACEPTAR",null);
+                        build.create().show();
+
                     }
-                    return true;
                 }
-                return false;
+                return true;
+            }
+            return false;
             }
         });
 
@@ -86,7 +100,21 @@ public class ControlArticulosActivity extends AppCompatActivity {
                     tvstock.setText("");
                     etarticulo.requestFocus();
                     etcantidad.setText("");
-                    ActualizarArticulo(trama);
+
+                    if(Utilitario.isOnline(getApplicationContext())){
+
+                        ActualizarArticulo(trama);
+
+                    }else{
+
+                        AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
+                        build.setTitle("Atención .. !");
+                        build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                        build.setCancelable(false);
+                        build.setNegativeButton("ACEPTAR",null);
+                        build.create().show();
+
+                    }
                 }
             }
         });
@@ -140,24 +168,25 @@ public class ControlArticulosActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response1) {
-                        try {
+                    try {
 
-                            progressDialog.dismiss();
-                            JSONObject jsonObject = new JSONObject(response1);
-                            //Boolean success = jsonObject.getBoolean("success");
-                            AlertDialog.Builder bulider = new AlertDialog.Builder(ControlArticulosActivity.this);
-                            bulider.setMessage("Se ha actualizado el registro");
-                            bulider.setPositiveButton("Regresar",null)
-                                    .create()
-                                    .show();
-                            tv4.setVisibility(View.GONE);
-                            tv6.setVisibility(View.GONE);
-                            btngrabar.setVisibility(View.GONE);
-                            etcantidad.setVisibility(View.GONE);
+                        progressDialog.dismiss();
+                        JSONObject jsonObject = new JSONObject(response1);
+                        //Boolean success = jsonObject.getBoolean("success");
+                        AlertDialog.Builder bulider = new AlertDialog.Builder(ControlArticulosActivity.this);
+                        bulider.setMessage("Se ha actualizado el registro");
+                        bulider.setPositiveButton("Regresar",null)
+                                .create()
+                                .show();
+                        tv4.setVisibility(View.GONE);
+                        tv6.setVisibility(View.GONE);
+                        btngrabar.setVisibility(View.GONE);
+                        etcantidad.setVisibility(View.GONE);
 
-                            } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
                     }
                 }, new Response.ErrorListener() {
                 @Override
@@ -189,113 +218,113 @@ public class ControlArticulosActivity extends AppCompatActivity {
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
         url =  ejecutaFuncionCursorTestMovil+ "PKG_MOVIL_FUNCIONES.FN_CONSULTAR_PRODUCTO_WS_SP&variables='"+trama+"'";
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url ,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response1) {
-                        String Mensaje = "";
-                            try {
+            new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response1) {
+                String Mensaje = "";
+                    try {
+                        progressDialog.dismiss();
+                        btnbuscar.setVisibility(View.VISIBLE);
+                        response1 = response1.trim();
+                            if(response1.equals("{\"success\":false}")){
                                 progressDialog.dismiss();
+                                etarticulo.setText("");
                                 btnbuscar.setVisibility(View.VISIBLE);
-                                response1 = response1.trim();
-                                    if(response1.equals("{\"success\":false}")){
-                                        progressDialog.dismiss();
-                                        etarticulo.setText("");
-                                        btnbuscar.setVisibility(View.VISIBLE);
-                                        etarticulo.requestFocus();
-                                        etcantidad.setText("");
-                                    }
-                                JSONObject jsonObject = new JSONObject(response1);
-                                Boolean success = jsonObject.getBoolean("success");
-                                JSONArray jsonArray = jsonObject.getJSONArray("hojaruta");
-                                Boolean condicion = false,error = false;
-                                btnbuscar.setVisibility(View.VISIBLE);
-
-                                if (success) {
-                                    etcantidad.setText("");
-                                    etarticulo.setText("");
-                                    etcantidad.requestFocus();
-                                    tv4.setVisibility(View.VISIBLE);
-                                    tv6.setVisibility(View.VISIBLE);
-                                    btngrabar.setVisibility(View.VISIBLE);
-                                    etcantidad.setVisibility(View.VISIBLE);
-                                    etcantidad.requestFocus();
-                                    etcantidad.append("1");
-                                    String Aux = response1.replace("{","|");
-                                    Aux = Aux.replace("}","|");
-                                    Aux = Aux.replace("[","|");
-                                    Aux = Aux.replace("]","|");
-                                    Aux = Aux.replace("\"","|");
-                                    Aux = Aux.replace(","," ");
-                                    Aux = Aux.replace("|","");
-                                    Aux = Aux.replace(":"," ");
-                                    String partes[] = Aux.split(" ");
-                                    for (String palabras : partes){
-                                        if (condicion){ Mensaje += palabras+" "; }
-                                        if (palabras.equals("ERROR")){
-                                            condicion = true;
-                                            error = true;
-                                        }
-                                    }
-                                    if (error) {
-                                        tvdetallearticulo.setText("");
-                                        tvprecio.setText("");
-                                        tvstock.setText("");
-                                        tv4.setVisibility(View.GONE);
-                                        tv6.setVisibility(View.GONE);
-                                        btngrabar.setVisibility(View.GONE);
-                                        etcantidad.setVisibility(View.GONE);
-
-                                        AlertDialog.Builder dialog = new AlertDialog.Builder(
-                                                ControlArticulosActivity.this);
-                                        dialog.setMessage(Mensaje)
-                                                .setNegativeButton("Regresar",null)
-                                                .create()
-                                                .show();
-                                    }else {
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            jsonObject = jsonArray.getJSONObject(i);
-                                            codigoArticulo = jsonObject.getString("COD_ARTICULO");
-                                            tvcontrol.setText(codigoArticulo);
-                                            String descripcion = jsonObject.getString(
-                                                    "COD_ARTICULO") +" - "+ jsonObject.getString("DESCRIPCION");
-                                            tvdetallearticulo.setText(descripcion);
-                                            Double stock = Double.parseDouble(jsonObject.getString("STOCK"));
-
-                                            // Segundo metodo
-                                            DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
-                                            simbolos.setDecimalSeparator('.'); // Se define el simbolo para el separador decimal
-                                            simbolos.setGroupingSeparator(',');// Se define el simbolo para el separador de los miles
-                                            DecimalFormat formateador = new DecimalFormat("###,###.00",simbolos); // Se crea el formato del numero con los simbolo
-                                            tvstock.setText(formateador.format(stock));
-
-                                        }
-                                    }
-                                } else {
-
-                                    progressDialog.dismiss();
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                                            ControlArticulosActivity.this);
-                                    builder.setMessage("No se encontró Articulo")
-                                            .setNegativeButton("Regresar", null)
-                                            .create()
-                                            .show();
-                                    etarticulo.requestFocus();
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
+                                etarticulo.requestFocus();
+                                etcantidad.setText("");
                             }
+                        JSONObject jsonObject = new JSONObject(response1);
+                        Boolean success = jsonObject.getBoolean("success");
+                        JSONArray jsonArray = jsonObject.getJSONArray("hojaruta");
+                        Boolean condicion = false,error = false;
+                        btnbuscar.setVisibility(View.VISIBLE);
+
+                        if (success) {
+                            etcantidad.setText("");
+                            etarticulo.setText("");
+                            etcantidad.requestFocus();
+                            tv4.setVisibility(View.VISIBLE);
+                            tv6.setVisibility(View.VISIBLE);
+                            btngrabar.setVisibility(View.VISIBLE);
+                            etcantidad.setVisibility(View.VISIBLE);
+                            etcantidad.requestFocus();
+                            etcantidad.append("1");
+                            String Aux = response1.replace("{","|");
+                            Aux = Aux.replace("}","|");
+                            Aux = Aux.replace("[","|");
+                            Aux = Aux.replace("]","|");
+                            Aux = Aux.replace("\"","|");
+                            Aux = Aux.replace(","," ");
+                            Aux = Aux.replace("|","");
+                            Aux = Aux.replace(":"," ");
+                            String partes[] = Aux.split(" ");
+                            for (String palabras : partes){
+                                if (condicion){ Mensaje += palabras+" "; }
+                                if (palabras.equals("ERROR")){
+                                    condicion = true;
+                                    error = true;
+                                }
+                            }
+                            if (error) {
+                                tvdetallearticulo.setText("");
+                                tvprecio.setText("");
+                                tvstock.setText("");
+                                tv4.setVisibility(View.GONE);
+                                tv6.setVisibility(View.GONE);
+                                btngrabar.setVisibility(View.GONE);
+                                etcantidad.setVisibility(View.GONE);
+
+                                AlertDialog.Builder dialog = new AlertDialog.Builder(
+                                        ControlArticulosActivity.this);
+                                dialog.setMessage(Mensaje)
+                                        .setNegativeButton("Regresar",null)
+                                        .create()
+                                        .show();
+                            }else {
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    jsonObject = jsonArray.getJSONObject(i);
+                                    codigoArticulo = jsonObject.getString("COD_ARTICULO");
+                                    tvcontrol.setText(codigoArticulo);
+                                    String descripcion = jsonObject.getString(
+                                            "COD_ARTICULO") +" - "+ jsonObject.getString("DESCRIPCION");
+                                    tvdetallearticulo.setText(descripcion);
+                                    Double stock = Double.parseDouble(jsonObject.getString("STOCK"));
+
+                                    // Segundo metodo
+                                    DecimalFormatSymbols simbolos = new DecimalFormatSymbols();
+                                    simbolos.setDecimalSeparator('.'); // Se define el simbolo para el separador decimal
+                                    simbolos.setGroupingSeparator(',');// Se define el simbolo para el separador de los miles
+                                    DecimalFormat formateador = new DecimalFormat("###,###.00",simbolos); // Se crea el formato del numero con los simbolo
+                                    tvstock.setText(formateador.format(stock));
+
+                                }
+                            }
+                        } else {
+
+                            progressDialog.dismiss();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(
+                                    ControlArticulosActivity.this);
+                            builder.setMessage("No se encontró Articulo")
+                                    .setNegativeButton("Regresar", null)
+                                    .create()
+                                    .show();
+                            etarticulo.requestFocus();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-                progressDialog.dismiss();
-                AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
-                build.setTitle("Atención .. !");
-                build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
-                build.setCancelable(false);
-                build.setNegativeButton("ACEPTAR",null);
-                build.create().show();
+                }
+            }, new Response.ErrorListener() {
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            error.printStackTrace();
+            progressDialog.dismiss();
+            AlertDialog.Builder build = new AlertDialog.Builder(ControlArticulosActivity.this);
+            build.setTitle("Atención .. !");
+            build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
+            build.setCancelable(false);
+            build.setNegativeButton("ACEPTAR",null);
+            build.create().show();
 
             }
         });

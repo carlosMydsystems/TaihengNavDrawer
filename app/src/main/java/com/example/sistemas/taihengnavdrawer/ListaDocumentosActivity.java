@@ -38,6 +38,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.sistemas.taihengnavdrawer.Entidades.DetalleHojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.HojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
+import com.example.sistemas.taihengnavdrawer.Utilitarios.Utilitario;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,6 +76,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
         listahojaruta = (ArrayList<HojaRuta> ) getIntent().getSerializableExtra("listahojaruta");
         listadetallehojaruta = (ArrayList<DetalleHojaRuta> ) getIntent().getSerializableExtra("Lista");
 
+        Toast.makeText(this, "" + tvlatitud, Toast.LENGTH_SHORT).show();
         lvp1 = new ArrayList<>();
         lvp2 = new ArrayList<>();
         lvp3 = new ArrayList<>();
@@ -110,6 +112,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                 finish();
             }
         });
+
         ObtenerLista();
     }
 
@@ -136,14 +139,11 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                         " \n" +      "Fecha Doc       :    " + listadetallehojaruta.get(i).getFechadocumento()+
                         " \n" +      "Importe Doc   :    S/ " + listadetallehojaruta.get(i).getImportedocumento() +
                         " \n" +      "Estado             :    " + "   " + " - " + " \n" );
-
             }else{
-
                 listaInformacion.add("Documento     :   " +listadetallehojaruta.get(i).getNumerodocumento()  +
                         " \n" +      "Fecha Doc       :    " + listadetallehojaruta.get(i).getFechadocumento()+
                         " \n" +      "Importe Doc   :    S/ " + listadetallehojaruta.get(i).getImportedocumento() +
                         " \n" +      "Estado             :    " + listadetallehojaruta.get(i).getEstado() + " - " + detalleEstado.substring(0,12)+" \n" );
-
             }
         }
 
@@ -206,9 +206,25 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                                 .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
+
                                          Trama = listadetallehojaruta.get(position).getCodDocumento()+"|"+
-                                           listadetallehojaruta.get(position).getNumerodocumento()+"|"+ESTADO+"|"+numhojaaux+"|"+USUARIO+"|"+tvlatitud+"|"+tvlongitud+"|"+tvdireccion;
-                                        EnviarTrama(Trama,ESTADO,position);
+                                           listadetallehojaruta.get(position).getNumerodocumento()+"|"+ESTADO+
+                                                 "|"+numhojaaux+"|"+USUARIO+"|"+tvlatitud+"|"+tvlongitud+"|"+tvdireccion;
+
+                                        if(Utilitario.isOnline(getApplicationContext())){
+
+                                            EnviarTrama(Trama,ESTADO,position);
+
+                                        }else{
+
+                                            AlertDialog.Builder build = new AlertDialog.Builder(ListaDocumentosActivity.this);
+                                            build.setTitle("Atención .. !");
+                                            build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                                            build.setCancelable(false);
+                                            build.setNegativeButton("ACEPTAR",null);
+                                            build.create().show();
+
+                                        }
                                     }
                                 })
                                 .create()
@@ -397,12 +413,15 @@ public class ListaDocumentosActivity extends AppCompatActivity {
             switch (status) {
                 case LocationProvider.AVAILABLE:
                     Log.d("debug", "LocationProvider.AVAILABLE");
+                    Toast.makeText(fechaPactadaActivity, "LocationProvider.AVAILABLE", Toast.LENGTH_SHORT).show();
                     break;
                 case LocationProvider.OUT_OF_SERVICE:
                     Log.d("debug", "LocationProvider.OUT_OF_SERVICE");
+                    Toast.makeText(fechaPactadaActivity, "LocationProvider.OUT_OF_SERVICE", Toast.LENGTH_SHORT).show();
                     break;
                 case LocationProvider.TEMPORARILY_UNAVAILABLE:
                     Log.d("debug", "LocationProvider.TEMPORARILY_UNAVAILABLE");
+                    Toast.makeText(fechaPactadaActivity, "LocationProvider.TEMPORARILY_UNAVAILABLE", Toast.LENGTH_SHORT).show();
                     break;
             }
         }

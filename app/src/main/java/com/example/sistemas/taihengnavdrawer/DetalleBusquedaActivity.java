@@ -20,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.sistemas.taihengnavdrawer.Entidades.DetalleHojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.HojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
+import com.example.sistemas.taihengnavdrawer.Utilitarios.Utilitario;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,7 +58,21 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
         usuario = (Usuario)getIntent().getExtras().getSerializable("Usuario");
 
         // Se hace la captura de la cadena en JSON - por medio de un request con método GET
-        CapturarJson(); // objeto1
+
+        if(Utilitario.isOnline(getApplicationContext())){
+
+            CapturarJson();
+
+        }else{
+
+            AlertDialog.Builder build = new AlertDialog.Builder(DetalleBusquedaActivity.this);
+            build.setTitle("Atención .. !");
+            build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+            build.setCancelable(false);
+            build.setNegativeButton("ACEPTAR",null);
+            build.create().show();
+
+        }
 
         // se le da funcionalidad al boton Regresar
 

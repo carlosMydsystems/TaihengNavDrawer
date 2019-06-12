@@ -94,6 +94,7 @@ public class BuscarActivity extends AppCompatActivity {
             intent.putExtras(bundle1);
             startActivity(intent);
             finish();
+
             }
 
         });

@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity
         Integer anio = fecha.get(Calendar.YEAR);
         String fechaActual =Formatotiempo(dia) +"/"+Formatotiempo( mes) +"/"+anio;
         tvfecha.setText(fechaActual);
-        Timer timer ;
+        Timer timer;
 
         usuario = (Usuario)getIntent().getExtras().getSerializable("Usuario");
 

@@ -16,6 +16,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.sistemas.taihengnavdrawer.Entidades.DetalleHojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.HojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
+import com.example.sistemas.taihengnavdrawer.Utilitarios.Utilitario;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +47,21 @@ public class PasaEstadoActivity extends AppCompatActivity {
         numHojaRuta = (String)getIntent().getExtras().get("numHojaRuta1");
         listadetallehojaruta = (ArrayList<DetalleHojaRuta> ) getIntent().getSerializableExtra("Lista");
         listahojaruta = (ArrayList<HojaRuta> ) getIntent().getSerializableExtra("listahojaruta");
-        Recorelista();
+
+        if(Utilitario.isOnline(getApplicationContext())){
+
+            Recorelista();
+
+        }else{
+
+            AlertDialog.Builder build = new AlertDialog.Builder(PasaEstadoActivity.this);
+            build.setTitle("Atención .. !");
+            build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+            build.setCancelable(false);
+            build.setNegativeButton("ACEPTAR",null);
+            build.create().show();
+
+        }
     }
 
     public void Recorelista (){
