@@ -76,7 +76,6 @@ public class ListaDocumentosActivity extends AppCompatActivity {
         listahojaruta = (ArrayList<HojaRuta> ) getIntent().getSerializableExtra("listahojaruta");
         listadetallehojaruta = (ArrayList<DetalleHojaRuta> ) getIntent().getSerializableExtra("Lista");
 
-        Toast.makeText(this, "" + tvlatitud, Toast.LENGTH_SHORT).show();
         lvp1 = new ArrayList<>();
         lvp2 = new ArrayList<>();
         lvp3 = new ArrayList<>();

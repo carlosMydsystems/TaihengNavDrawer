@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -94,6 +94,8 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
             }
         });
 
+
+        /** Parte del codigo para colocar el boton de cuenta corriente
         // Se define la funcionalidad del Boton de Cta  Cte
         btnCtaCte = findViewById(R.id.btnCtacte);
         btnCtaCte.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +106,7 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
 
             }
         });
+        */
 
         btnListarDocumento = findViewById(R.id.btnListarDocumento);
         btnListarDocumento.setOnClickListener(new View.OnClickListener() {
@@ -181,12 +184,7 @@ public class DetalleBusquedaActivity extends AppCompatActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                             progressDialog.dismiss();
-                            AlertDialog.Builder build = new AlertDialog.Builder(DetalleBusquedaActivity.this);
-                            build.setTitle("Atención .. !");
-                            build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
-                            build.setCancelable(false);
-                            build.setNegativeButton("ACEPTAR",null);
-                            build.create().show();
+                            Toast.makeText(DetalleBusquedaActivity.this, "Se ha producido el error : " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 }, new Response.ErrorListener() {
