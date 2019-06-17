@@ -182,13 +182,9 @@ public class MainActivity extends AppCompatActivity
         String resultado;
 
         if (9>=numero){
-
             resultado = "0" + numero.toString();
-
         }else{
-
             resultado = numero.toString();
-
         }
 
         return resultado;

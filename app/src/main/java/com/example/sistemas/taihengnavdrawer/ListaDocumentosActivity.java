@@ -66,6 +66,8 @@ public class ListaDocumentosActivity extends AppCompatActivity {
         setContentView(R.layout.activity_lista_documentos);
 
         lvdocumentos = findViewById(R.id.lvDocumentos);
+        // Se hace la referencia a las coordenadas de longitud, latitud y el testo de la direccion fisica de la ubicación
+
         tvlatitud = findViewById(R.id.tvlatitud);
         tvlongitud = findViewById(R.id.tvlongitud);
         tvdireccion = findViewById(R.id.tvdireccion);
@@ -196,6 +198,8 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                     }
                 });
 
+                Toast.makeText(ListaDocumentosActivity.this, "" + tvdireccion.getText(), Toast.LENGTH_SHORT).show();
+
                 builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -212,7 +216,9 @@ public class ListaDocumentosActivity extends AppCompatActivity {
 
                                         if(Utilitario.isOnline(getApplicationContext())){
 
-                                            EnviarTrama(Trama,ESTADO,position);
+                                            //EnviarTrama(Trama,ESTADO,position);
+
+                                            Toast.makeText(ListaDocumentosActivity.this, "Trama : " + Trama, Toast.LENGTH_LONG).show();
 
                                         }else{
 
@@ -265,6 +271,8 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response1) {
 
+                        // se hace la captura de la excepcion mediante el Try Catch para esta parte del programa
+                        try{
                         progressDialog.dismiss();
                         Id_cliente = getIntent().getExtras().getString("Id_Cliente");
                         numhojaaux = getIntent().getExtras().getString("numHojaRuta1");
@@ -292,7 +300,9 @@ public class ListaDocumentosActivity extends AppCompatActivity {
 
                         startActivity(intent);
                         finish();
-
+                        }catch (Exception e) {
+                            Toast.makeText(ListaDocumentosActivity.this, "se ha producido el error " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -325,7 +335,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
 
             /**  Se hace la habilitacion del GPS, si se descomenta esta parte del codigo */
 
-            /*
+            /**
             Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
             startActivity(settingsIntent);
             */
@@ -347,7 +357,6 @@ public class ListaDocumentosActivity extends AppCompatActivity {
     }
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 1000) {
-
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 locationStart();
                 return;
@@ -357,6 +366,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
     public void setLocation(Location loc) {
         //Obtener la direccion de la calle a partir de la latitud y la longitud
         if (loc.getLatitude() != 0.0 && loc.getLongitude() != 0.0) {
+            /** Se hace un llamado para ver la localizacion de las longitu y latitud */
             try {
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
                 List<Address> list = geocoder.getFromLocation(
@@ -367,6 +377,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+                Toast.makeText(this, "Se ha producido el error : "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -407,6 +418,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
             tvlatitud.setText("GPS%20Activado");
         }
 
+        // Metodo sobre escrito que permite ver si se ha hecho un cambio en el status del proveedor de servicios
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
             switch (status) {

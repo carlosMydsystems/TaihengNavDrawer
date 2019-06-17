@@ -3,6 +3,7 @@ package com.example.sistemas.taihengnavdrawer;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -39,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btnlogeo;
     Usuario usuario;
     String url, Mensaje = "",imei = "",puerto = "8422";
-    boolean validador = false;
+    boolean validador = true;
     TextView tvVersion;
 
     public static String ejecutaFuncionCursorTestMovil;
@@ -76,23 +77,23 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-            if(Utilitario.isOnline(getApplicationContext())){
+                if(Utilitario.isOnline(getApplicationContext())){
 
-                if (etusuario.getText().equals("") || etclave.getText().equals("")) {
-                } else { verificarUsuario(etusuario.getText().toString().replace(" ", "").toUpperCase()
-                        , etclave.getText().toString().replace(" ", "").toUpperCase(),imei);
+                    if (etusuario.getText().equals("") || etclave.getText().equals("")) {
+                    } else { verificarUsuario(etusuario.getText().toString().replace(" ", "").toUpperCase()
+                            , etclave.getText().toString().replace(" ", "").toUpperCase(),imei);
+                    }
+
+                }else{
+
+                    AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this);
+                    build.setTitle("Atención .. !");
+                    build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                    build.setCancelable(false);
+                    build.setNegativeButton("ACEPTAR",null);
+                    build.create().show();
+
                 }
-
-            }else{
-
-                AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this);
-                build.setTitle("Atención .. !");
-                build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
-                build.setCancelable(false);
-                build.setNegativeButton("ACEPTAR",null);
-                build.create().show();
-
-            }
             }
         });
     }
@@ -106,21 +107,10 @@ public class LoginActivity extends AppCompatActivity {
         Mensaje = "";
         RequestQueue requestQueue= Volley.newRequestQueue(getApplicationContext());
 
+        // Permite el uso de la variable estatica de la llamada  a la WebService
         url =  ejecutaFuncionCursorTestMovil +
                 "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"+Codigo_usuario.toUpperCase()+"|"
                 +Contraseña_usuario.toUpperCase()+"|"+Imei+"'"; // se debe actalizar la URL
-
-/*
-        url =  ejecutaFuncionCursorTestMovil + "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"
-                +Codigo_usuario.toUpperCase()+"|"+Contraseña_usuario.toUpperCase()+"|357014075227793'"; // se debe actalizar la URL
-
-        url =  ejecutaFuncionCursorTestMovil + "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"
-        +Codigo_usuario.toUpperCase()+"|"+Contraseña_usuario.toUpperCase()+"|359555085551935'";357014075227793
-
-        url =  ejecutaFuncionCursorTestMovil + "PKG_WEB_HERRAMIENTAS.FN_WS_LOGIN&variables='7|"+
-                Codigo_usuario.toUpperCase()+"|"+Contraseña_usuario.toUpperCase()+"|359555085551935'";
-
-*/
 
         StringRequest stringRequest=new StringRequest(Request.Method.GET, url ,
                 new Response.Listener<String>() {
@@ -213,11 +203,10 @@ public class LoginActivity extends AppCompatActivity {
 
                             for (String palabras : partes){
                                 if (condicion){ Mensaje += palabras+" "; }
-                                if (palabras.equals("ERROR")){
-                                    condicion = true;
-                                    error = true;
-                                }
-
+                                    if (palabras.equals("ERROR")){
+                                        condicion = true;
+                                        error = true;
+                                    }
                             }
 
                             if (error) {
@@ -265,7 +254,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    // Con este método consultamos al usuario si nos puede dar acceso a leer los datos internos del móvil
+    // Con este método consultamos al usuario si nos puede dar acceso a leer los datos internos del móvil - extrayendo el valor del Imei
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults)

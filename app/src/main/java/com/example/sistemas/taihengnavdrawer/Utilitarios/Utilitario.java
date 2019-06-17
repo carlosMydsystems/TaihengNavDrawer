@@ -29,4 +29,13 @@ public class Utilitario {
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
         return networkInfo != null && networkInfo.isAvailable() && networkInfo.isConnected();
     }
+
+    public static String acotaValor(String textAcotado, Integer valorAcotar){
+
+        String cadena;
+        cadena = textAcotado.substring(0,valorAcotar);
+
+        return cadena;
+    }
+
 }
