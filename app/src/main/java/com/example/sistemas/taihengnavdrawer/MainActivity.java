@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
 import java.util.Calendar;
 import java.util.Timer;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity
         String fechaActual =Formatotiempo(dia) +"/"+Formatotiempo( mes) +"/"+anio;
         tvfecha.setText(fechaActual);
         Timer timer;
-
         usuario = (Usuario)getIntent().getExtras().getSerializable("Usuario");
 
         btnsalir.setOnClickListener(new View.OnClickListener() {
@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_hojaRuta) {
 
+
             Intent intent = new Intent(MainActivity.this,ValidaHojaRutaActivity.class);
             Bundle bundle = new Bundle();
             bundle.putSerializable("Usuario",usuario);
@@ -161,6 +162,8 @@ public class MainActivity extends AppCompatActivity
             finish();
 
         } else if (id == R.id.nav_Articulos) {
+
+            Toast.makeText(this, "Prueba", Toast.LENGTH_SHORT).show();
 
         } else if (id == R.id.nav_slideshow) {
 

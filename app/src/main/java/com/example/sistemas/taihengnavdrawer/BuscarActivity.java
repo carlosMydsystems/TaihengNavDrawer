@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.sistemas.taihengnavdrawer.Adaptador.CustomAdapter;
 import com.example.sistemas.taihengnavdrawer.Entidades.DetalleHojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.HojaRuta;
 import com.example.sistemas.taihengnavdrawer.Entidades.Usuario;
@@ -77,8 +78,12 @@ public class BuscarActivity extends AppCompatActivity {
                     " \n" + listahojaruta.get(i).getDistrito() + " \n");
         }
 
-        ArrayAdapter<String> adaptador = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaInformacion);
-        lvclientes.setAdapter(adaptador);
+        CustomAdapter.CustomListAdapter adapter = new CustomAdapter.CustomListAdapter(this,R.layout.lista_customizada,listaInformacion);
+        lvclientes.setAdapter(adapter);
+
+        //ArrayAdapter<String> adaptador = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listaInformacion);
+        //lvclientes.setAdapter(adaptador);
+
         lvclientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

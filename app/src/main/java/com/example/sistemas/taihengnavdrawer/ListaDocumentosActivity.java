@@ -150,6 +150,8 @@ public class ListaDocumentosActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adaptador = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,listaInformacion);
         lvdocumentos.setAdapter(adaptador);
+
+
         lvdocumentos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
@@ -216,9 +218,9 @@ public class ListaDocumentosActivity extends AppCompatActivity {
 
                                         if(Utilitario.isOnline(getApplicationContext())){
 
-                                            //EnviarTrama(Trama,ESTADO,position);
+                                            EnviarTrama(Trama,ESTADO,position);
 
-                                            Toast.makeText(ListaDocumentosActivity.this, "Trama : " + Trama, Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(ListaDocumentosActivity.this, "Trama : " + Trama, Toast.LENGTH_LONG).show();
 
                                         }else{
 
@@ -232,6 +234,7 @@ public class ListaDocumentosActivity extends AppCompatActivity {
                                         }
                                     }
                                 })
+                                .setNegativeButton("Cancelar",null)
                                 .create()
                                 .show();
                     }
@@ -437,5 +440,4 @@ public class ListaDocumentosActivity extends AppCompatActivity {
             }
         }
     }
-
 }

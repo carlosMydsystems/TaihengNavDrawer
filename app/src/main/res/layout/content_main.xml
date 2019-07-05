@@ -42,7 +42,7 @@
         android:layout_marginTop="70dp"
         android:layout_marginEnd="8dp"
         android:background="#014284"
-        android:text="Hoja de Ruta"
+        android:text="Hoja de Ruta "
         android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.538"

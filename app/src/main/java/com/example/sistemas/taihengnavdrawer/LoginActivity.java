@@ -40,12 +40,11 @@ public class LoginActivity extends AppCompatActivity {
     Button btnlogeo;
     Usuario usuario;
     String url, Mensaje = "",imei = "",puerto = "8422";
-    boolean validador = true;
+    boolean validador = false;
     TextView tvVersion;
 
     public static String ejecutaFuncionCursorTestMovil;
     public static String ejecutaFuncionTestMovil;
-
     public static ArrayList<String> numbers;
     static final Integer PHONESTATS = 0x1;
 
@@ -77,23 +76,26 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(Utilitario.isOnline(getApplicationContext())){
+            if(Utilitario.isOnline(getApplicationContext())){
 
-                    if (etusuario.getText().equals("") || etclave.getText().equals("")) {
-                    } else { verificarUsuario(etusuario.getText().toString().replace(" ", "").toUpperCase()
-                            , etclave.getText().toString().replace(" ", "").toUpperCase(),imei);
-                    }
-
-                }else{
-
-                    AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this);
-                    build.setTitle("Atención .. !");
-                    build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
-                    build.setCancelable(false);
-                    build.setNegativeButton("ACEPTAR",null);
-                    build.create().show();
-
+                if (etusuario.getText().equals("") || etclave.getText().equals("")) {
+                } else { verificarUsuario(etusuario.getText().toString().replace(" ", "").toUpperCase()
+                        , etclave.getText().toString().replace(" ", "").toUpperCase(),imei);
                 }
+
+            }else{
+
+                // Se aplica el patron de diseño builder
+                AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this);
+                build.setTitle("Atención .. !");
+                build.setMessage("El Servicio de Internet no esta Activo, por favor revisar");
+                build.setCancelable(false);
+                build.setNegativeButton("ACEPTAR",null);
+                build.setIcon(R.drawable.atencion);
+
+                build.create().show();
+
+            }
             }
         });
     }
@@ -156,7 +158,6 @@ public class LoginActivity extends AppCompatActivity {
                                 }else {
 
                                     for (int i = 0; i < jsonArray.length(); i++) {
-
                                         usuario = new Usuario();
                                         jsonObject = jsonArray.getJSONObject(i);
                                         usuario.setCodAlmacen(jsonObject.getString("COD_ALMACEN"));
@@ -168,7 +169,6 @@ public class LoginActivity extends AppCompatActivity {
                                         usuario.setTipoCambio(jsonObject.getString("TIPO_CAMBIO"));
                                         usuario.setLugar(jsonObject.getString("COD_TIPO_LISTAPRE")); // Se usa en la busqueda de producto
                                         usuario.setUser(etusuario.getText().toString().toUpperCase().trim());
-
                                     }
                                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                                     intent.putExtra("userId", etusuario.getText().toString());
@@ -224,12 +224,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
                 progressDialog.dismiss();
-                AlertDialog.Builder build = new AlertDialog.Builder(LoginActivity.this);
-                build.setTitle("Atención .. !");
-                build.setMessage("Error,  el servicio no se encuentra activo en estos momentos");
-                build.setCancelable(false);
-                build.setNegativeButton("ACEPTAR",null);
-                build.create().show();
+
             }
         });
 
